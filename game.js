@@ -1,3 +1,8 @@
+// ==============================
+// Lexispace v0.3
+// ==============================
+
+
 // The word we want to delete
 const target = "HAPPINESS";
 
@@ -14,7 +19,10 @@ let currentMask = wordToMask(target);
 let playedWords = [];
 
 
-// Load the dictionary when the website starts
+// ==============================
+// Load the dictionary
+// ==============================
+
 fetch("words_enable.txt")
     .then(response => {
 
@@ -37,15 +45,16 @@ fetch("words_enable.txt")
         dictionary = new Set(words);
         dictionaryLoaded = true;
 
+        // Show the original target at the beginning
         document.getElementById("remaining").textContent =
             target;
 
         document.getElementById("message").textContent =
-            "Lexispace v0.2 — Dictionary loaded (" +
+            "Lexispace v0.3 — Dictionary loaded (" +
             dictionary.size + " words).";
 
         console.log(
-            "Lexispace v0.2 — Dictionary loaded:",
+            "Lexispace v0.3 — Dictionary loaded:",
             dictionary.size,
             "words."
         );
@@ -55,16 +64,20 @@ fetch("words_enable.txt")
         dictionaryLoaded = false;
 
         document.getElementById("message").textContent =
-            "Lexispace v0.2 — Dictionary ERROR: " +
+            "Lexispace v0.3 — Dictionary ERROR: " +
             error.message;
 
         console.error(
-            "Lexispace v0.2 — Dictionary ERROR:",
+            "Lexispace v0.3 — Dictionary ERROR:",
             error
         );
     });
 
-// Convert a word into its 26-bit parity representation
+
+// ==============================
+// Convert word to parity mask
+// ==============================
+
 function wordToMask(word) {
 
     let mask = 0;
@@ -84,7 +97,10 @@ function wordToMask(word) {
 }
 
 
-// Convert a mask back into letters
+// ==============================
+// Convert mask back to letters
+// ==============================
+
 function maskToWord(mask) {
 
     let result = "";
@@ -100,12 +116,20 @@ function maskToWord(mask) {
 }
 
 
-// Add a word to the game
+// ==============================
+// Add a word
+// ==============================
+
 function addWord() {
 
     const input = document.getElementById("wordInput");
 
     const word = input.value.trim().toLowerCase();
+
+
+    // Always put the caret back in the input box
+    input.focus();
+
 
     // Don't do anything if the input is empty
     if (word === "") {
@@ -113,53 +137,56 @@ function addWord() {
     }
 
 
-    // Check whether the dictionary has loaded
+    // Check whether dictionary has loaded
     if (!dictionaryLoaded) {
 
         document.getElementById("message").textContent =
-            "Dictionary is not loaded.";
-        
+            "Lexispace v0.3 — Dictionary is not loaded.";
+
         return;
     }
 
 
-    // Check whether the word is in the dictionary
+    // Check whether word is in dictionary
     if (!dictionary.has(word)) {
 
         document.getElementById("message").textContent =
-            "Not in the dictionary.";
+            "Lexispace v0.3 — Not in the dictionary.";
 
         input.value = "";
+
+        input.focus();
 
         return;
     }
 
 
-    // The target word itself is not allowed
+    // The target itself is not allowed
     if (word === target.toLowerCase()) {
 
         document.getElementById("message").textContent =
-            "You cannot play the target word.";
+            "Lexispace v0.3 — You cannot play the target word.";
 
         input.value = "";
+
+        input.focus();
 
         return;
     }
 
 
-    // XOR the new word with the current state
+    // XOR the word with the current state
     currentMask ^= wordToMask(word);
 
     playedWords.push(word);
 
 
-    // Now that the player has made a move,
-    // show the parity representation of the remaining state.
+    // Display the new state
     document.getElementById("remaining").textContent =
         maskToWord(currentMask);
 
 
-    // Add the word to the list
+    // Add word to the list
     const list = document.getElementById("wordList");
 
     const item = document.createElement("li");
@@ -168,18 +195,77 @@ function addWord() {
 
     list.appendChild(item);
 
+
+    // Clear the input
     input.value = "";
 
+    // Put the caret back in the input box
+    input.focus();
 
-    // Have we reached zero?
+
+    // Check for victory
     if (currentMask === 0) {
 
         document.getElementById("message").textContent =
-            "YOU WIN!";
+            "Lexispace v0.3 — YOU WIN!";
 
     } else {
 
         document.getElementById("message").textContent =
-            "";
+            "Lexispace v0.3 — Word added.";
+
     }
+}
+
+
+// ==============================
+// Press Enter to add word
+// ==============================
+
+document.getElementById("wordInput").addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            addWord();
+        }
+    }
+);
+
+
+// ==============================
+// Shuffle the current letters
+// ==============================
+
+function shuffleLetters() {
+
+    const remainingElement =
+        document.getElementById("remaining");
+
+    let letters =
+        remainingElement.textContent.split("");
+
+
+    // Fisher-Yates shuffle
+    for (let i = letters.length - 1; i > 0; i--) {
+
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [letters[i], letters[j]] =
+            [letters[j], letters[i]];
+    }
+
+
+    remainingElement.textContent =
+        letters.join("");
+
+
+    // Keep the caret in the word input
+    document.getElementById("wordInput").focus();
+
+    document.getElementById("message").textContent =
+        "Lexispace v0.3 — Letters shuffled.";
 }
