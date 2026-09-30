@@ -4,8 +4,11 @@ const target = "HAPPINESS";
 // The dictionary
 let dictionary = new Set();
 
+// Whether the dictionary has successfully loaded
+let dictionaryLoaded = false;
+
 // The current state of the game
-let currentMask;
+let currentMask = wordToMask(target);
 
 // Words the player has entered
 let playedWords = [];
@@ -13,28 +16,45 @@ let playedWords = [];
 
 // Load the dictionary when the website starts
 fetch("words-enable.txt")
-    .then(response => response.text())
+    .then(response => {
+
+        // fetch() does NOT automatically reject 404 errors,
+        // so we have to check this ourselves.
+        if (!response.ok) {
+            throw new Error(
+                "Dictionary file could not be found. HTTP status: " +
+                response.status
+            );
+        }
+
+        return response.text();
+    })
     .then(text => {
 
         // Turn the text file into a set of words
         const words = text
             .split(/\r?\n/)
             .map(word => word.trim().toLowerCase())
-            .filter(word => word !== "");
+            .filter(word => /^[a-z]+$/.test(word));
 
         dictionary = new Set(words);
+        dictionaryLoaded = true;
 
-        // Start the game
-        currentMask = wordToMask(target);
-
+        // Keep the initial display as the actual target word.
+        // We only show the parity representation after the player
+        // makes their first move.
         document.getElementById("remaining").textContent =
-            maskToWord(currentMask);
+            target;
 
         document.getElementById("message").textContent =
-            "Dictionary loaded!";
+            "Dictionary loaded (" + dictionary.size + " words).";
+
+        console.log("Dictionary loaded:", dictionary.size, "words.");
 
     })
     .catch(error => {
+
+        dictionaryLoaded = false;
 
         document.getElementById("message").textContent =
             "Could not load dictionary.";
@@ -93,10 +113,10 @@ function addWord() {
 
 
     // Check whether the dictionary has loaded
-    if (dictionary.size === 0) {
+    if (!dictionaryLoaded) {
 
         document.getElementById("message").textContent =
-            "Dictionary is still loading.";
+            "Dictionary is not loaded.";
 
         return;
     }
@@ -132,7 +152,8 @@ function addWord() {
     playedWords.push(word);
 
 
-    // Update the remaining letters
+    // Now that the player has made a move,
+    // show the parity representation of the remaining state.
     document.getElementById("remaining").textContent =
         maskToWord(currentMask);
 
