@@ -15,13 +15,13 @@ let playedWords = [];
 
 
 // Load the dictionary when the website starts
-fetch("words-enable.txt")
+fetch("words_enable.txt")
     .then(response => {
 
         if (!response.ok) {
             throw new Error(
                 "HTTP " + response.status +
-                " while loading words-enable.txt"
+                " while loading words_enable.txt"
             );
         }
 
