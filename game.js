@@ -18,12 +18,10 @@ let playedWords = [];
 fetch("words-enable.txt")
     .then(response => {
 
-        // fetch() does NOT automatically reject 404 errors,
-        // so we have to check this ourselves.
         if (!response.ok) {
             throw new Error(
-                "Dictionary file could not be found. HTTP status: " +
-                response.status
+                "HTTP " + response.status +
+                " while loading words-enable.txt"
             );
         }
 
@@ -31,7 +29,6 @@ fetch("words-enable.txt")
     })
     .then(text => {
 
-        // Turn the text file into a set of words
         const words = text
             .split(/\r?\n/)
             .map(word => word.trim().toLowerCase())
@@ -40,28 +37,32 @@ fetch("words-enable.txt")
         dictionary = new Set(words);
         dictionaryLoaded = true;
 
-        // Keep the initial display as the actual target word.
-        // We only show the parity representation after the player
-        // makes their first move.
         document.getElementById("remaining").textContent =
             target;
 
         document.getElementById("message").textContent =
-            "Dictionary loaded (" + dictionary.size + " words).";
+            "Lexispace v0.2 — Dictionary loaded (" +
+            dictionary.size + " words).";
 
-        console.log("Dictionary loaded:", dictionary.size, "words.");
-
+        console.log(
+            "Lexispace v0.2 — Dictionary loaded:",
+            dictionary.size,
+            "words."
+        );
     })
     .catch(error => {
 
         dictionaryLoaded = false;
 
         document.getElementById("message").textContent =
-            "Could not load dictionary.";
+            "Lexispace v0.2 — Dictionary ERROR: " +
+            error.message;
 
-        console.error(error);
+        console.error(
+            "Lexispace v0.2 — Dictionary ERROR:",
+            error
+        );
     });
-
 
 // Convert a word into its 26-bit parity representation
 function wordToMask(word) {
@@ -117,7 +118,7 @@ function addWord() {
 
         document.getElementById("message").textContent =
             "Dictionary is not loaded.";
-
+        
         return;
     }
 
