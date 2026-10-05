@@ -2,13 +2,11 @@
 // SECTION 1: GAME STATE
 // ====================
 
-const target = "HAPPINESS";
-let currentMask = wordToMask(target);
+let target = "";
+let currentMask = 0;
 let dictionary = new Set();
 let dictionaryLoaded = false;
 let playedWords = [];
-
-
 // ====================
 // SECTION 2: DICTIONARY
 // ====================
@@ -28,6 +26,15 @@ fetch("words_enable.txt")
 
         dictionary = new Set(words);
         dictionaryLoaded = true;
+
+        const candidates = words.filter(word => wordToMask(word) !== 0);
+        target = candidates[Math.floor(Math.random() * candidates.length)];
+        currentMask = wordToMask(target);
+
+        document.getElementById("target").textContent =
+            target.toUpperCase();
+
+        updateRemaining();
 
         document.getElementById("message").textContent =
             "Dictionary loaded: " + dictionary.size + " words.";
