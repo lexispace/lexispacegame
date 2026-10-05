@@ -11,6 +11,28 @@ let playedWords = [];
 // SECTION 2: DICTIONARY
 // ====================
 
+function newPuzzle() {
+    const candidates = [...dictionary].filter(word => wordToMask(word) !== 0);
+
+    target = candidates[Math.floor(Math.random() * candidates.length)];
+    currentMask = wordToMask(target);
+    playedWords = [];
+
+    document.getElementById("target").textContent =
+        target.toUpperCase();
+
+    document.getElementById("wordList").innerHTML = "";
+
+    document.getElementById("message").textContent = "";
+
+    document.getElementById("solverResult").textContent = "";
+
+    updateRemaining();
+
+    document.getElementById("wordInput").value = "";
+    document.getElementById("wordInput").focus();
+}
+
 fetch("words_enable.txt")
     .then(response => {
         if (!response.ok) {
@@ -27,14 +49,7 @@ fetch("words_enable.txt")
         dictionary = new Set(words);
         dictionaryLoaded = true;
 
-        const candidates = words.filter(word => wordToMask(word) !== 0);
-        target = candidates[Math.floor(Math.random() * candidates.length)];
-        currentMask = wordToMask(target);
-
-        document.getElementById("target").textContent =
-            target.toUpperCase();
-
-        updateRemaining();
+        newPuzzle();
 
         document.getElementById("message").textContent =
             "Dictionary loaded: " + dictionary.size + " words.";
@@ -44,8 +59,6 @@ fetch("words_enable.txt")
             "Error loading dictionary.";
         console.error(error);
     });
-
-
 // ====================
 // SECTION 3: WORD / MASK UTILITIES
 // ====================
