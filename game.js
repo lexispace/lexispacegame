@@ -12,8 +12,10 @@ let playedWords = [];
 // ====================
 
 function newPuzzle() {
-    const candidates = [...dictionary].filter(word => wordToMask(word) !== 0);
+    solverReady = false;
+    solverMoves = new Map();
 
+    const candidates = [...dictionary].filter(word => wordToMask(word) !== 0);
     target = candidates[Math.floor(Math.random() * candidates.length)];
     currentMask = wordToMask(target);
     playedWords = [];
