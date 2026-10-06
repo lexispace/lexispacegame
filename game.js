@@ -369,3 +369,24 @@ document.getElementById("wordInput").addEventListener("keydown", event => {
 document.getElementById("wordInput").focus();
 
 updateRemaining();
+// ====================
+// SECTION 7: EQUIVALENCE FINDER
+// ====================
+
+function equivFinder(input) {
+    const result = document.getElementById("equivFinderResult");
+
+    if (!dictionaryLoaded) {
+        result.textContent = "Dictionary is still loading.";
+        return;
+    }
+
+    const mask = wordToMask(input);
+    const matches = [...dictionary]
+        .filter(word => wordToMask(word) === mask)
+        .sort((a, b) => a.localeCompare(b));
+
+    result.textContent = matches.length > 0
+        ? matches.join("\n")
+        : "No matching words found.";
+}
