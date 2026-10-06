@@ -382,9 +382,15 @@ function equivFinder(input) {
     }
 
     const mask = wordToMask(input);
-    const matches = [...dictionary]
-        .filter(word => wordToMask(word) === mask)
-        .sort((a, b) => a.localeCompare(b));
+    const sortBy = document.getElementById("equivFinderSort").value;
+const matches = [...dictionary]
+    .filter(word => wordToMask(word) === mask);
+
+if (sortBy === "length") {
+    matches.sort((a, b) => a.length - b.length || a.localeCompare(b));
+} else {
+    matches.sort((a, b) => a.localeCompare(b));
+}
 
     result.textContent = matches.length > 0
         ? matches.join("\n")
