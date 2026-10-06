@@ -135,6 +135,10 @@
     <aside id="equivFinderPanel">
     <h3>Dev: Equivalence Finder</h3>
     <input id="equivFinderInput" type="text" placeholder="Enter any string">
+    <select id="equivFinderSort">
+    <option value="alphabetical">Alphabetical</option>
+    <option value="length">By length</option>
+</select>
     <button onclick="equivFinder(document.getElementById('equivFinderInput').value)">Find equivalents</button>
     <p id="equivFinderResult" aria-live="polite"></p>
 </aside>
