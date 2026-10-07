@@ -48,10 +48,10 @@ const puzzles = [
     { id: 32, target: "slovenia" }
     { id: 33, target: "bulgaria" }
     { id: 34, target: "tolkien" }
-    { id: 34, target: "eswatini" }
-    { id: 34, target: "malawi" }
-    { id: 34, target: "montenegro" }
-    { id: 34, target: "france" }
+    { id: 35, target: "eswatini" }
+    { id: 36, target: "malawi" }
+    { id: 37, target: "montenegro" }
+    { id: 38, target: "france" }
 ];
 
 function loadPuzzle(puzzle) {
