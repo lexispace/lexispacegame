@@ -69,6 +69,8 @@ function loadPuzzle(puzzle) {
 
     document.getElementById("wordInput").value = "";
     document.getElementById("wordInput").focus();
+    document.getElementById("previousPuzzle").style.display =
+    currentPuzzleId === 1 ? "none" : "inline-block";
 }
 
 function loadPuzzleById(id) {
@@ -81,7 +83,21 @@ function loadPuzzleById(id) {
 
     loadPuzzle(puzzle);
 }
+function previousPuzzle() {
+    if (currentPuzzleId <= 1) {
+        return;
+    }
 
+    loadPuzzleById(currentPuzzleId - 1);
+}
+
+function nextPuzzle() {
+    if (currentPuzzleId >= puzzles.length) {
+        return;
+    }
+
+    loadPuzzleById(currentPuzzleId + 1);
+}
 function newPuzzle() {
     const candidates = [...dictionary].filter(
         word => wordToMask(word) !== 0
