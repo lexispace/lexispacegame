@@ -7,32 +7,93 @@ let currentMask = 0;
 let dictionary = new Set();
 let dictionaryLoaded = false;
 let playedWords = [];
+
+let currentPuzzleId = null;
 // ====================
-// SECTION 2: DICTIONARY
+// SECTION 2: PUZZLES + DICTIONARY
 // ====================
 
-function newPuzzle() {
-    solverReady = false;
-    solverMoves = new Map();
+const puzzles = [
+    { id: 1, target: "a" },
+    { id: 2, target: "b" },
+    { id: 3, target: "c" },
+    { id: 4, target: "d" },
+    { id: 5, target: "e" },
+    { id: 6, target: "f" },
+    { id: 7, target: "g" },
+    { id: 8, target: "h" },
+    { id: 9, target: "i" },
+    { id: 10, target: "j" },
+    { id: 11, target: "k" },
+    { id: 12, target: "l" },
+    { id: 13, target: "m" },
+    { id: 14, target: "n" },
+    { id: 15, target: "o" },
+    { id: 16, target: "p" },
+    { id: 17, target: "q" },
+    { id: 18, target: "r" },
+    { id: 19, target: "s" },
+    { id: 20, target: "t" },
+    { id: 21, target: "u" },
+    { id: 22, target: "v" },
+    { id: 23, target: "w" },
+    { id: 24, target: "x" },
+    { id: 25, target: "y" },
+    { id: 26, target: "z" }
+];
 
-    const candidates = [...dictionary].filter(word => wordToMask(word) !== 0);
-    target = candidates[Math.floor(Math.random() * candidates.length)];
+function loadPuzzle(puzzle) {
+    target = puzzle.target.toLowerCase();
+    currentPuzzleId = puzzle.id;
+
     currentMask = wordToMask(target);
     playedWords = [];
+
+    solverReady = false;
+    solverMoves = new Map();
 
     document.getElementById("target").textContent =
         target.toUpperCase();
 
+    document.getElementById("puzzleNumber").textContent =
+        puzzle.id !== null
+            ? "Puzzle #" + puzzle.id
+            : "Random Puzzle";
+
     document.getElementById("wordList").innerHTML = "";
 
     document.getElementById("message").textContent = "";
-
     document.getElementById("solverResult").textContent = "";
 
     updateRemaining();
 
     document.getElementById("wordInput").value = "";
     document.getElementById("wordInput").focus();
+}
+
+function loadPuzzleById(id) {
+    const puzzle = puzzles.find(puzzle => puzzle.id === id);
+
+    if (!puzzle) {
+        console.log("Puzzle not found.");
+        return;
+    }
+
+    loadPuzzle(puzzle);
+}
+
+function newPuzzle() {
+    const candidates = [...dictionary].filter(
+        word => wordToMask(word) !== 0
+    );
+
+    const randomTarget =
+        candidates[Math.floor(Math.random() * candidates.length)];
+
+    loadPuzzle({
+        id: null,
+        target: randomTarget
+    });
 }
 
 fetch("words_enable.txt")
@@ -51,7 +112,7 @@ fetch("words_enable.txt")
         dictionary = new Set(words);
         dictionaryLoaded = true;
 
-        newPuzzle();
+        loadPuzzle(puzzles[0]);
 
         document.getElementById("message").textContent =
             "Dictionary loaded: " + dictionary.size + " words.";
