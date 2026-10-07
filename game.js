@@ -39,18 +39,18 @@ const puzzles = [
     { id: 23, target: "w" },
     { id: 24, target: "x" },
     { id: 25, target: "y" },
-    { id: 26, target: "z" }
-    { id: 27, target: "germany" }
-    { id: 28, target: "venezuela" }
-    { id: 29, target: "madagascar" }
-    { id: 30, target: "silmarillion" }
-    { id: 31, target: "iceland" }
-    { id: 32, target: "slovenia" }
-    { id: 33, target: "bulgaria" }
-    { id: 34, target: "tolkien" }
-    { id: 35, target: "eswatini" }
-    { id: 36, target: "malawi" }
-    { id: 37, target: "montenegro" }
+    { id: 26, target: "z" },
+    { id: 27, target: "germany" },
+    { id: 28, target: "venezuela" },
+    { id: 29, target: "madagascar" },
+    { id: 30, target: "silmarillion" },
+    { id: 31, target: "iceland" },
+    { id: 32, target: "slovenia" },
+    { id: 33, target: "bulgaria" },
+    { id: 34, target: "tolkien" },
+    { id: 35, target: "eswatini" },
+    { id: 36, target: "malawi" },
+    { id: 37, target: "montenegro" },
     { id: 38, target: "france" }
 ];
 
