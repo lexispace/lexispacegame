@@ -490,6 +490,8 @@ if (sortBy === "length") {
 // ====================
 
 function analyzeDictionary() {
+    document.getElementById("message").textContent =
+    "Analysis started...";
     if (!dictionaryLoaded) {
         document.getElementById("message").textContent =
             "Dictionary is still loading.";
