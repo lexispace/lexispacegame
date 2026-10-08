@@ -485,3 +485,66 @@ if (sortBy === "length") {
         ? matches.join("\n")
         : "No matching words found.";
 }
+// ====================
+// SECTION 8: ONE-OFF DICTIONARY ANALYSIS
+// ====================
+
+function analyzeDictionary() {
+    if (!dictionaryLoaded) {
+        document.getElementById("message").textContent =
+            "Dictionary is still loading.";
+        return;
+    }
+
+    const maskCounts = new Map();
+    let zeroMaskWords = 0;
+
+    for (const word of dictionary) {
+        const mask = wordToMask(word);
+
+        if (mask === 0) {
+            zeroMaskWords++;
+            continue;
+        }
+
+        maskCounts.set(
+            mask,
+            (maskCounts.get(mask) || 0) + 1
+        );
+    }
+
+    const distribution = new Map();
+
+    for (const count of maskCounts.values()) {
+        distribution.set(
+            count,
+            (distribution.get(count) || 0) + 1
+        );
+    }
+
+    const counts = [...distribution.keys()].sort((a, b) => a - b);
+
+    let output =
+        "Total words: " + dictionary.size +
+        "\nZero-mask words: " + zeroMaskWords +
+        "\nDistinct nonzero masks: " + maskCounts.size +
+        "\n\nMask multiplicity:\n";
+
+    for (const count of counts) {
+        output +=
+            count + " word" + (count === 1 ? "" : "s") +
+            ": " + distribution.get(count) + " masks\n";
+    }
+
+    const largestClass = Math.max(...counts);
+
+    const retained =
+        maskCounts.size / (dictionary.size - zeroMaskWords) * 100;
+
+    output +=
+        "\nLargest equivalence class: " + largestClass +
+        "\nWords retained after deduplication: " +
+        retained.toFixed(2) + "%";
+
+    document.getElementById("solverResult").textContent = output;
+}
