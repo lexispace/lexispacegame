@@ -486,67 +486,225 @@ if (sortBy === "length") {
         : "No matching words found.";
 }
 // ====================
-// SECTION 8: ONE-OFF DICTIONARY ANALYSIS
+// SECTION 8: SOLVER ANALYSIS
 // ====================
 
-function analyzeDictionary() {
-    document.getElementById("message").textContent =
-    "Analysis started...";
+function analyzeSolver() {
+    const input = document
+        .getElementById("analysisInput")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const result = document.getElementById("analysisResult");
+
     if (!dictionaryLoaded) {
-        document.getElementById("message").textContent =
-            "Dictionary is still loading.";
+        result.textContent = "Dictionary is still loading.";
         return;
     }
 
-    const maskCounts = new Map();
-    let zeroMaskWords = 0;
+    if (input === "") {
+        result.textContent = "Enter a string first.";
+        return;
+    }
+
+    const startMask = wordToMask(input);
+
+    if (startMask === 0) {
+        result.textContent =
+            "This string has simplified length 0.";
+        return;
+    }
+
+    const analysisMoves = new Map();
 
     for (const word of dictionary) {
         const mask = wordToMask(word);
 
         if (mask === 0) {
-            zeroMaskWords++;
             continue;
         }
 
-        maskCounts.set(
-            mask,
-            (maskCounts.get(mask) || 0) + 1
-        );
+        if (!analysisMoves.has(mask)) {
+            analysisMoves.set(mask, word);
+        }
     }
 
-    const distribution = new Map();
+    const moves = [...analysisMoves.entries()];
 
-    for (const count of maskCounts.values()) {
-        distribution.set(
-            count,
-            (distribution.get(count) || 0) + 1
+    const startParent = new Map();
+    const goalParent = new Map();
+
+    const startMove = new Map();
+    const goalMove = new Map();
+
+    startParent.set(startMask, null);
+    goalParent.set(0, null);
+
+    let startFrontier = [startMask];
+    let goalFrontier = [0];
+
+    const startFrontiers = [1];
+    const goalFrontiers = [1];
+
+    let startExpanded = 0;
+    let goalExpanded = 0;
+    let maskChecks = 0;
+    let meeting = null;
+
+    const startTime = performance.now();
+
+    while (
+        startFrontier.length > 0 &&
+        goalFrontier.length > 0
+    ) {
+        const startResult = expandAnalysisFrontier(
+            startFrontier,
+            startParent,
+            startMove,
+            goalParent,
+            moves
         );
+
+        startExpanded += startResult.expanded;
+        maskChecks += startResult.maskChecks;
+
+        if (startResult.meeting !== null) {
+            meeting = startResult.meeting;
+            break;
+        }
+
+        startFrontier = startResult.nextFrontier;
+        startFrontiers.push(startFrontier.length);
+
+        const goalResult = expandAnalysisFrontier(
+            goalFrontier,
+            goalParent,
+            goalMove,
+            startParent,
+            moves
+        );
+
+        goalExpanded += goalResult.expanded;
+        maskChecks += goalResult.maskChecks;
+
+        if (goalResult.meeting !== null) {
+            meeting = goalResult.meeting;
+            break;
+        }
+
+        goalFrontier = goalResult.nextFrontier;
+        goalFrontiers.push(goalFrontier.length);
     }
 
-    const counts = [...distribution.keys()].sort((a, b) => a - b);
+    const time = performance.now() - startTime;
+
+    let solutionLength = "No solution";
+
+    if (meeting !== null) {
+        const solution = reconstructSolution(
+            meeting,
+            startParent,
+            startMove,
+            goalParent,
+            goalMove
+        );
+
+        solutionLength = solution.length;
+    }
+
+    const simplifiedLength = countBits(startMask);
 
     let output =
-        "Total words: " + dictionary.size +
-        "\nZero-mask words: " + zeroMaskWords +
-        "\nDistinct nonzero masks: " + maskCounts.size +
-        "\n\nMask multiplicity:\n";
+        "Input: " + input +
+        "\nSimplified length: " + simplifiedLength +
+        "\nMask: " + maskToLetters(startMask) +
+        "\n\n" +
 
-    for (const count of counts) {
+        "Solution length: " + solutionLength +
+        "\nTime: " + time.toFixed(1) + " ms" +
+        "\n\n" +
+
+        "Distinct moves: " + moves.length +
+        "\nStates expanded: " +
+            (startExpanded + goalExpanded) +
+        "\nStates discovered: " +
+            (startParent.size + goalParent.size) +
+        "\nMask checks: " + maskChecks +
+        "\n\n" +
+
+        "Start frontier:\n";
+
+    for (let i = 0; i < startFrontiers.length; i++) {
         output +=
-            count + " word" + (count === 1 ? "" : "s") +
-            ": " + distribution.get(count) + " masks\n";
+            "Depth " + i + ": " +
+            startFrontiers[i] + "\n";
     }
 
-    const largestClass = Math.max(...counts);
+    output += "\nGoal frontier:\n";
 
-    const retained =
-        maskCounts.size / (dictionary.size - zeroMaskWords) * 100;
+    for (let i = 0; i < goalFrontiers.length; i++) {
+        output +=
+            "Depth " + i + ": " +
+            goalFrontiers[i] + "\n";
+    }
 
-    output +=
-        "\nLargest equivalence class: " + largestClass +
-        "\nWords retained after deduplication: " +
-        retained.toFixed(2) + "%";
+    result.textContent = output;
+}
 
-    document.getElementById("solverResult").textContent = output;
+
+function expandAnalysisFrontier(
+    frontier,
+    parent,
+    moveUsed,
+    otherParent,
+    moves
+) {
+    const nextFrontier = [];
+    let maskChecks = 0;
+
+    for (const state of frontier) {
+        for (const [mask, word] of moves) {
+            maskChecks++;
+
+            const next = state ^ mask;
+
+            if (parent.has(next)) {
+                continue;
+            }
+
+            parent.set(next, state);
+            moveUsed.set(next, word);
+
+            if (otherParent.has(next)) {
+                return {
+                    nextFrontier: [],
+                    meeting: next,
+                    expanded: frontier.length,
+                    maskChecks: maskChecks
+                };
+            }
+
+            nextFrontier.push(next);
+        }
+    }
+
+    return {
+        nextFrontier: nextFrontier,
+        meeting: null,
+        expanded: frontier.length,
+        maskChecks: maskChecks
+    };
+}
+
+
+function countBits(mask) {
+    let count = 0;
+
+    while (mask !== 0) {
+        mask &= mask - 1;
+        count++;
+    }
+
+    return count;
 }
