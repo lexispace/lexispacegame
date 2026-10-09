@@ -650,6 +650,17 @@ function analyzeSolver() {
     }
 
     result.textContent = output;
+    const dataBox = document.getElementById("analysisData");
+
+if (dataBox.value === "") {
+    dataBox.value = "Hamming weight\tTime (ms)\tStates expanded";
+}
+
+dataBox.value +=
+    "\n" +
+    simplifiedLength + "\t" +
+    time.toFixed(1) + "\t" +
+    (startExpanded + goalExpanded);
 }
 
 
