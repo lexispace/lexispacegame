@@ -1,0 +1,60 @@
+{
+  "sets": [
+    {
+      "id": 1,
+      "title": "Countries I",
+      "description": "The first collection of country-themed challenges.",
+      "mode": "CC",
+      "words": ["India", "Romania", "Serbia", "Argentina", "Mongolia", "Canada", "Australia", "Bolivia", "United States", "Russia"],
+      "difficulties": [1, 1, 2, 2, 3, 3, 3, 4, 4, 5]
+    },
+    {
+      "id": 2,
+      "title": "Countries II",
+      "description": "More country-themed challenges.",
+      "mode": "CC",
+      "words": ["Iceland", "France", "Montenegro", "Eswatini", "Malawi", "Slovenia", "Bulgaria", "Madagascar", "Venezuela", "Germany"],
+      "difficulties": [3, 4, 4, 5, 5, 5, 5, 5, 5, 5]
+    },
+    {
+      "id": 3,
+      "title": "Tolkien I",
+      "description": "Challenges inspired by Tolkien's works.",
+      "mode": "CC",
+      "words": ["Silmarillion", "Tolkien", "Balrog", "Placeholder 4", "Placeholder 5", "Placeholder 6", "Placeholder 7", "Placeholder 8", "Placeholder 9", "Placeholder 10"],
+      "difficulties": [4, 1, 2, 2, 3, 3, 4, 4, 5, 5]
+    },
+    {
+      "id": 4,
+      "title": "Tolkien II",
+      "description": "More Tolkien-themed challenges.",
+      "mode": "CC",
+      "words": ["Sindarin", "Gothmog", "Denethor", "Tengwar", "Palantir", "Rivendell", "Anduril", "Tolkien", "Melkor", "Morgoth"],
+      "difficulties": [3, 4, 4, 5, 5, 5, 5, 5, 5, 5]
+    },
+    {
+      "id": 5,
+      "title": "Tolkien III",
+      "description": "Even more Tolkien-themed challenges.",
+      "mode": "CC",
+      "words": ["Beleriand", "Feanorians", "Shelob", "Ulmo", "Azanulbizar", "Balrogs", "Silmarillion", "Ancalagon", "Minas Tirith", "Luthien"],
+      "difficulties": [5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+    },
+    {
+      "id": 6,
+      "title": "Fields of Study I",
+      "description": "Puzzles inspired by academic disciplines.",
+      "mode": "CC",
+      "words": ["Economics", "Engineering", "Logic", "Ethology", "Mathematics", "Physics", "Genetics", "Seismology", "Astronomy", "Hydrology"],
+      "difficulties": [1, 2, 2, 2, 3, 3, 3, 4, 5, 5]
+    },
+    {
+      "id": 7,
+      "title": "Fields of Study II",
+      "description": "More puzzles inspired by disciplines.",
+      "mode": "CC",
+      "words": ["Myrmecology", "Philosophy", "Otorhinolaryngology", "Garbology", "Nephology", "Nephrology", "Pogonology", "Psephology", "Enigmatology", "Sociology"],
+      "difficulties": [3, 3, 3, 4, 4, 4, 5, 5, 5, 5]
+    }
+  ]
+}
