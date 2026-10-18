@@ -7,39 +7,27 @@ let currentMask = 0;
 let dictionary = new Set();
 let dictionaryLoaded = false;
 let playedWords = [];
-
 let currentPuzzleId = null;
+let puzzles = [];
+let currentPuzzleIndex = -1;
 // ====================
 // SECTION 2: PUZZLES + DICTIONARY
 // ====================
 
-const puzzles = [
-    { id: 1, target: "germany" },
-    { id: 2, target: "venezuela" },
-    { id: 3, target: "madagascar" },
-    { id: 4, target: "france" },
-    { id: 5, target: "iceland" },
-    { id: 6, target: "slovenia" },
-    { id: 7, target: "bulgaria" },
-    { id: 8, target: "montenegro" },
-    { id: 9, target: "eswatini" },
-    { id: 10, target: "malawi" },
-    { id: 11, target: "tolkien" },
-    { id: 12, target: "anduril" },  
-    { id: 13, target: "silmarillion" },  
-    { id: 14, target: "balrogs" },  
-    { id: 15, target: "sindarin" },  
-    { id: 16, target: "tengwar" },  
-    { id: 17, target: "rivendell" },  
-    { id: 18, target: "palantir" },  
-    { id: 19, target: "melkor" },  
-    { id: 20, target: "morgoth" }  
-
-];
+function normalizeWord(word) {
+    return word.toLowerCase().replace(/[^a-z]/g, "");
+}
 
 function loadPuzzle(puzzle) {
-    target = puzzle.target.toLowerCase();
+    // Keep the original spelling for display, but normalize internally.
+    const displayTarget = puzzle.target;
+    target = normalizeWord(displayTarget);
+
     currentPuzzleId = puzzle.id;
+
+    currentPuzzleIndex = puzzle.id !== null
+        ? puzzles.findIndex(p => p.id === puzzle.id)
+        : -1;
 
     currentMask = wordToMask(target);
     playedWords = [];
@@ -48,11 +36,11 @@ function loadPuzzle(puzzle) {
     solverMoves = new Map();
 
     document.getElementById("target").textContent =
-        target.toUpperCase();
+        displayTarget.toUpperCase();
 
     document.getElementById("puzzleNumber").textContent =
         puzzle.id !== null
-            ? "Puzzle #" + puzzle.id
+            ? `${puzzle.setTitle} — Puzzle ${puzzle.id}`
             : "Random Puzzle";
 
     document.getElementById("wordList").innerHTML = "";
@@ -64,75 +52,147 @@ function loadPuzzle(puzzle) {
 
     document.getElementById("wordInput").value = "";
     document.getElementById("wordInput").focus();
+
+    // Navigation is available only for curated puzzles.
     document.getElementById("previousPuzzle").style.display =
-    currentPuzzleId === 1 ? "none" : "inline-block";
+        currentPuzzleIndex > 0 ? "inline-block" : "none";
+
+    document.getElementById("nextPuzzle").style.display =
+        currentPuzzleIndex >= 0 &&
+        currentPuzzleIndex < puzzles.length - 1
+            ? "inline-block"
+            : "none";
 }
 
+
 function loadPuzzleById(id) {
-    const puzzle = puzzles.find(puzzle => puzzle.id === id);
+    const puzzle = puzzles.find(p => p.id === id);
 
     if (!puzzle) {
-        console.log("Puzzle not found.");
+        console.log("Puzzle not found:", id);
         return;
     }
 
     loadPuzzle(puzzle);
 }
+
+
 function previousPuzzle() {
-    if (currentPuzzleId <= 1) {
+    if (currentPuzzleIndex <= 0) {
         return;
     }
 
-    loadPuzzleById(currentPuzzleId - 1);
+    loadPuzzleById(puzzles[currentPuzzleIndex - 1].id);
 }
+
 
 function nextPuzzle() {
-    if (currentPuzzleId >= puzzles.length) {
+    if (
+        currentPuzzleIndex < 0 ||
+        currentPuzzleIndex >= puzzles.length - 1
+    ) {
         return;
     }
 
-    loadPuzzleById(currentPuzzleId + 1);
+    loadPuzzleById(puzzles[currentPuzzleIndex + 1].id);
 }
+
+
 function newPuzzle() {
     const candidates = [...dictionary].filter(
         word => wordToMask(word) !== 0
     );
+
+    if (candidates.length === 0) {
+        document.getElementById("message").textContent =
+            "No suitable words are available.";
+        return;
+    }
 
     const randomTarget =
         candidates[Math.floor(Math.random() * candidates.length)];
 
     loadPuzzle({
         id: null,
-        target: randomTarget
+        target: randomTarget,
+        setTitle: null
     });
 }
 
-fetch("words_enable.txt")
-    .then(response => {
+
+// Load the dictionary and curated puzzles.
+// Start the game only after both have loaded.
+
+Promise.all([
+    fetch("words_enable.txt").then(response => {
         if (!response.ok) {
             throw new Error("Dictionary could not be loaded.");
         }
         return response.text();
+    }),
+
+    fetch("puzzles.json").then(response => {
+        if (!response.ok) {
+            throw new Error("Puzzle data could not be loaded.");
+        }
+        return response.json();
     })
-    .then(text => {
-        const words = text
-            .split(/\r?\n/)
-            .map(word => word.trim().toLowerCase())
-            .filter(word => word.length > 0);
+])
+.then(([dictionaryText, puzzleData]) => {
+    // Load dictionary.
+    const words = dictionaryText
+        .split(/\r?\n/)
+        .map(word => word.trim().toLowerCase())
+        .filter(word => word.length > 0);
 
-        dictionary = new Set(words);
-        dictionaryLoaded = true;
+    dictionary = new Set(words);
+    dictionaryLoaded = true;
 
-        loadPuzzle(puzzles[0]);
+    // Flatten the sets into one ordered list of puzzles.
+    puzzles = [];
 
-        document.getElementById("message").textContent =
-            "Dictionary loaded: " + dictionary.size + " words.";
-    })
-    .catch(error => {
-        document.getElementById("message").textContent =
-            "Error loading dictionary.";
-        console.error(error);
-    });
+    for (const set of puzzleData.sets) {
+        if (
+            !Array.isArray(set.words) ||
+            !Array.isArray(set.difficulties) ||
+            set.words.length !== set.difficulties.length
+        ) {
+            throw new Error(
+                `Invalid puzzle data in set ${set.id}: ` +
+                "words and difficulties must be arrays of equal length."
+            );
+        }
+
+        set.words.forEach((word, index) => {
+            puzzles.push({
+                id: `${set.id}-${index + 1}`,
+                target: word,
+                setId: set.id,
+                setTitle: set.title,
+                description: set.description,
+                mode: set.mode,
+                difficulty: set.difficulties[index]
+            });
+        });
+    }
+
+    if (puzzles.length === 0) {
+        throw new Error("No curated puzzles were found.");
+    }
+
+    // Start at the first curated puzzle.
+    loadPuzzle(puzzles[0]);
+
+    document.getElementById("message").textContent =
+        "Dictionary loaded: " + dictionary.size + " words.";
+})
+.catch(error => {
+    document.getElementById("message").textContent =
+        "Error loading game data. Check that words_enable.txt " +
+        "and puzzles.json are available and valid.";
+
+    console.error(error);
+});
 // ====================
 // SECTION 3: WORD / MASK UTILITIES
 // ====================
