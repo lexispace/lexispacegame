@@ -15,9 +15,12 @@ let currentPuzzleIndex = -1;
 // ====================
 
 function normalizeWord(word) {
-    return word.toLowerCase().replace(/[^a-z]/g, "");
+    return word
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z]/g, "");
 }
-
 function loadPuzzle(puzzle) {
     // Keep the original spelling for display, but normalize internally.
     const displayTarget = puzzle.target;
@@ -94,9 +97,10 @@ function renderCCMenu() {
             <td class="ccSetTitle">${set.title}</td>
             <td>${set.description}</td>
             <td class="ccDifficulty">
-                ${"★".repeat(set.totalDifficulty)}
-                <br>${set.totalDifficulty} stars
-            </td>
+    ${(set.totalDifficulty / puzzles.filter(
+        puzzle => puzzle.setId === set.id
+    ).length).toFixed(1)} / 5 ★
+</td>
         `;
 
         row.addEventListener("click", () => startSet(set.id));
