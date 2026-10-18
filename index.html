@@ -2,7 +2,53 @@
 <html>
 <head>
     <title>Lexispace</title>
+#ccMenu {
+    margin: 20px auto;
+}
 
+#ccSetTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+#ccSetTable th,
+#ccSetTable td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+#ccSetTable th {
+    background: #e9edf2;
+}
+
+#ccSetTable tbody tr {
+    cursor: pointer;
+}
+
+#ccSetTable tbody tr:hover {
+    background: #f0f4f8;
+}
+
+#ccSetTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.ccSetTitle {
+    font-weight: bold;
+}
+
+.ccDifficulty {
+    white-space: nowrap;
+}
+
+#backToSets {
+    margin-bottom: 15px;
+}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -111,7 +157,24 @@
 
 <body>
     <h1>Lexispace v0.5</h1>
+<div id="ccMenu">
+    <h2>Curated Challenges</h2>
+    <p>Choose a set to begin.</p>
 
+    <table id="ccSetTable">
+        <thead>
+            <tr>
+                <th>Set</th>
+                <th>Description</th>
+                <th>Total difficulty</th>
+            </tr>
+        </thead>
+        <tbody id="ccSetTableBody"></tbody>
+    </table>
+</div>
+
+<div id="gameScreen" style="display: none;">
+    <button id="backToSets" onclick="showCCMenu()">← Back to Sets</button>
     <p id="puzzleNumber">Puzzle #1</p>
     <div>
     <button id="previousPuzzle" onclick="previousPuzzle()">← Previous</button>
@@ -148,6 +211,7 @@
     <button onclick="equivFinder(document.getElementById('equivFinderInput').value)">Find equivalents</button>
     <p id="equivFinderResult" aria-live="polite"></p>
 </aside>
+    </div>
     <script src="game.js"></script>
 </body>
 </html>
