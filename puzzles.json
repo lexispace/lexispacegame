@@ -21,8 +21,8 @@
       "title": "Tolkien I",
       "description": "Challenges inspired by Tolkien's works.",
       "mode": "CC",
-      "words": ["Silmarillion", "Tolkien", "Balrog", "Placeholder 4", "Placeholder 5", "Placeholder 6", "Placeholder 7", "Placeholder 8", "Placeholder 9", "Placeholder 10"],
-      "difficulties": [4, 1, 2, 2, 3, 3, 4, 4, 5, 5]
+      "words": ["Sam", "Pippin", "Frodo", "Elf", "One Ring", "Gondor", "Merry", "Smeagol", "Gollum", "Sauron"],
+      "difficulties": [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
     },
     {
       "id": 4,
