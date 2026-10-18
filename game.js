@@ -31,6 +31,9 @@ function loadPuzzle(puzzle) {
 
     currentMask = wordToMask(target);
     playedWords = [];
+    
+    document.getElementById("ccMenu").style.display = "none";
+document.getElementById("gameScreen").style.display = "block";
 
     solverReady = false;
     solverMoves = new Map();
@@ -39,9 +42,9 @@ function loadPuzzle(puzzle) {
         displayTarget.toUpperCase();
 
     document.getElementById("puzzleNumber").textContent =
-        puzzle.id !== null
-            ? `${puzzle.setTitle} — Puzzle ${puzzle.id}`
-            : "Random Puzzle";
+    puzzle.id !== null
+        ? `${puzzle.setTitle} — Puzzle ${puzzle.position} · ${"★".repeat(puzzle.difficulty)}${"☆".repeat(5 - puzzle.difficulty)}`
+        : "Random Puzzle";
 
     document.getElementById("wordList").innerHTML = "";
 
@@ -64,7 +67,61 @@ function loadPuzzle(puzzle) {
             : "none";
 }
 
+function renderCCMenu() {
+    const tbody = document.getElementById("ccSetTableBody");
+    tbody.innerHTML = "";
 
+    // Calculate the total difficulty of each set.
+    const sets = new Map();
+
+    for (const puzzle of puzzles) {
+        if (!sets.has(puzzle.setId)) {
+            sets.set(puzzle.setId, {
+                id: puzzle.setId,
+                title: puzzle.setTitle,
+                description: puzzle.description,
+                totalDifficulty: 0
+            });
+        }
+
+        sets.get(puzzle.setId).totalDifficulty += puzzle.difficulty;
+    }
+
+    for (const set of sets.values()) {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td class="ccSetTitle">${set.title}</td>
+            <td>${set.description}</td>
+            <td class="ccDifficulty">
+                ${"★".repeat(set.totalDifficulty)}
+                <br>${set.totalDifficulty} stars
+            </td>
+        `;
+
+        row.addEventListener("click", () => startSet(set.id));
+
+        tbody.appendChild(row);
+    }
+}
+
+
+function showCCMenu() {
+    document.getElementById("gameScreen").style.display = "none";
+    document.getElementById("ccMenu").style.display = "block";
+}
+
+
+function startSet(setId) {
+    const firstPuzzle = puzzles.find(puzzle => puzzle.setId === setId);
+
+    if (!firstPuzzle) {
+        console.error("Set not found:", setId);
+        return;
+    }
+
+    loadPuzzle(firstPuzzle);
+}
 function loadPuzzleById(id) {
     const puzzle = puzzles.find(p => p.id === id);
 
@@ -164,27 +221,28 @@ Promise.all([
         }
 
         set.words.forEach((word, index) => {
-            puzzles.push({
-                id: `${set.id}-${index + 1}`,
-                target: word,
-                setId: set.id,
-                setTitle: set.title,
-                description: set.description,
-                mode: set.mode,
-                difficulty: set.difficulties[index]
-            });
-        });
+    puzzles.push({
+        id: `${set.id}-${index + 1}`,
+        position: index + 1,
+        target: word,
+        setId: set.id,
+        setTitle: set.title,
+        description: set.description,
+        mode: set.mode,
+        difficulty: set.difficulties[index]
+    });
+});
     }
 
     if (puzzles.length === 0) {
         throw new Error("No curated puzzles were found.");
     }
 
-    // Start at the first curated puzzle.
-    loadPuzzle(puzzles[0]);
+    // Populate the curated-challenge menu.
+renderCCMenu();
+showCCMenu();
 
-    document.getElementById("message").textContent =
-        "Dictionary loaded: " + dictionary.size + " words.";
+console.log("Dictionary loaded:", dictionary.size, "words.");
 })
 .catch(error => {
     document.getElementById("message").textContent =
