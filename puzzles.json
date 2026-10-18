@@ -30,7 +30,7 @@
       "description": "More Tolkien-themed challenges",
       "mode": "CC",
       "words": ["Sindarin", "Gothmog", "Denethor", "Tengwar", "Palantir", "Rivendell", "Anduril", "Tolkien", "Melkor", "Morgoth"],
-      "difficulties": [3, 4, 4, 5, 5, 5, 5, 5, 5, 5]
+      "difficulties": [2, 2, 2, 3, 4, 4, 4, 5, 5, 5]
     },
     {
       "id": 5,
@@ -55,7 +55,7 @@
       "mode": "CC",
       "words": ["Myrmecology", "Philosophy", "Otorhinolaryngology", "Garbology", "Nephology", "Nephrology", "Pogonology", "Psephology", "Enigmatology", "Sociology"],
       "difficulties": [3, 3, 3, 4, 4, 4, 5, 5, 5, 5]
-    }
+    },
     {
       "id": 8,
       "title": "Capital Cities I",
