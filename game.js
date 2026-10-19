@@ -36,6 +36,21 @@ function loadPuzzle(puzzle) {
 
     currentMask = wordToMask(target);
     playedWords = [];
+    thinkingAidUnlocked = false;
+score = 100;
+
+document.getElementById("score").textContent = score;
+document.getElementById("scoreMessage").textContent = "";
+
+document.getElementById("remainingPanel").style.display = "none";
+document.getElementById("thinkingAidStatus").textContent =
+    "Thinking aid locked.";
+
+document.getElementById("unlockThinkingAid").disabled = false;
+
+document.getElementById("shuffleButton").disabled = true;
+document.getElementById("addPairsButton").disabled = true;
+document.getElementById("revertButton").disabled = true;
     
     document.getElementById("ccMenu").style.display = "none";
 document.getElementById("gameScreen").style.display = "block";
