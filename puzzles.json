@@ -86,6 +86,28 @@
         "Of bliss and glad life there is little to be said", "Fortune favours the brave", 
         "A rose by any other name would smell as sweet", "Cogito ergo sum"],
       "difficulties": [1, 2, 3, 3, 4, 4, 4, 5, 5, 5]
+    },
+    {
+      "id": 11,
+      "title": "Tolkien IV",
+      "description": "Yet more Tolkien-themed challenges",
+      "mode": "CC",
+      "words": ["Alatar", "Pallando", "Telperion", 
+        "Laurelin", "Eru Ilúvatar", "Barahir", 
+        "Nolofinwë", "Thorondor", 
+        "Nimloth", "Nauglamír"],
+      "difficulties": [3, 3, 4, 4, 4, 4, 5, 5, 5, 5]
+    },
+    {
+      "id": 12,
+      "title": "Tolkien V",
+      "description": "Another batch of Tolkien-themed challenges",
+      "mode": "CC",
+      "words": ["Melian", "Nevrast", "Fornost Erain", 
+        "Glamdring", "Minas Anor", "Eriador", 
+        "Arthedain", "Cardolan", 
+        "Osgiliath", "Dol Amroth"],
+      "difficulties": [1, 2, 3, 4, 4, 4, 5, 5, 5, 5]
     }
   ]
 }
