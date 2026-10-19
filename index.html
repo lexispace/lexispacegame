@@ -201,12 +201,25 @@
     <button id="previousPuzzle" onclick="previousPuzzle()">← Previous</button>
     <button id="nextPuzzle" onclick="nextPuzzle()">Next →</button>
 </div>
-
 <p>Target:</p>
 <h2 id="target">A</h2>
 
+<div id="scorePanel">
+    <p>Score: <strong id="score">100</strong></p>
+    <p id="scoreMessage"></p>
+</div>
+
+<div id="thinkingAidPanel">
+    <button id="unlockThinkingAid" onclick="unlockThinkingAid()">
+        Unlock Thinking Aid (−20 points)
+    </button>
+    <p id="thinkingAidStatus">Thinking aid locked.</p>
+</div>
+
+<div id="remainingPanel" style="display: none;">
     <p>Remaining letters:</p>
     <h2 id="remaining">HAPPINESS</h2>
+</div>
 
     <input id="wordInput" type="text" placeholder="Enter a word">
 
