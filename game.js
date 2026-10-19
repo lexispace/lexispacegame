@@ -93,16 +93,22 @@ function renderCCMenu() {
     for (const set of sets.values()) {
         const row = document.createElement("tr");
 
-        row.innerHTML = `
-            <td class="ccSetTitle">${set.title}</td>
-            <td>${set.description}</td>
-            <td class="ccDifficulty">
-    ${(set.totalDifficulty / puzzles.filter(
-        puzzle => puzzle.setId === set.id
-    ).length).toFixed(1)} / 5 ★
-</td>
-        `;
+        const averageDifficulty = set.totalDifficulty /
+    puzzles.filter(puzzle => puzzle.setId === set.id).length;
 
+row.innerHTML = `
+    <td class="ccSetTitle">${set.title}</td>
+    <td>${set.description}</td>
+    <td class="ccDifficulty">
+        <div>${averageDifficulty.toFixed(1)} / 5</div>
+        <div class="difficultyBar">
+            <div
+                class="difficultyBarFill"
+                style="width: ${averageDifficulty / 5 * 100}%"
+            ></div>
+        </div>
+    </td>
+`;
         row.addEventListener("click", () => startSet(set.id));
 
         tbody.appendChild(row);
