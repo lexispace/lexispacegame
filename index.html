@@ -224,11 +224,19 @@
     <input id="wordInput" type="text" placeholder="Enter a word">
 
     <div>
-        <button onclick="addWord()">Add</button>
-        <button onclick="shuffleLetters()">Shuffle</button>
-        <button onclick="solvePuzzle()">Solve</button>
-        <button onclick="newPuzzle()">New Puzzle</button>
-    </div>
+    <button onclick="addWord()">Add</button>
+    <button id="shuffleButton" onclick="shuffleLetters()" disabled>
+        Shuffle
+    </button>
+    <button id="addPairsButton" onclick="addPairs()" disabled>
+        Add Pairs
+    </button>
+    <button id="revertButton" onclick="revertPairs()" disabled>
+        Revert
+    </button>
+    <button onclick="solvePuzzle()">Solve</button>
+    <button onclick="newPuzzle()">New Puzzle</button>
+</div>
 
     <p id="message"></p>
     <p id="solverResult"></p>
