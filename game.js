@@ -10,6 +10,8 @@ let playedWords = [];
 let currentPuzzleId = null;
 let puzzles = [];
 let currentPuzzleIndex = -1;
+let thinkingAidUnlocked = false;
+let score = 100;
 // ====================
 // SECTION 2: PUZZLES + DICTIONARY
 // ====================
@@ -300,7 +302,30 @@ function updateRemaining() {
     document.getElementById("remaining").textContent =
         maskToLetters(currentMask);
 }
+function unlockThinkingAid() {
+    if (thinkingAidUnlocked) {
+        return;
+    }
 
+    thinkingAidUnlocked = true;
+    score = Math.max(0, score - 20);
+
+    document.getElementById("score").textContent = score;
+    document.getElementById("scoreMessage").textContent =
+        "Thinking Aid unlocked: −20 points.";
+
+    document.getElementById("remainingPanel").style.display = "block";
+    document.getElementById("thinkingAidStatus").textContent =
+        "Thinking Aid unlocked!";
+
+    document.getElementById("unlockThinkingAid").disabled = true;
+
+    document.getElementById("shuffleButton").disabled = false;
+    document.getElementById("addPairsButton").disabled = false;
+    document.getElementById("revertButton").disabled = false;
+
+    updateRemaining();
+}
 function addWord() {
     if (!dictionaryLoaded) {
         document.getElementById("message").textContent =
