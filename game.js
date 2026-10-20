@@ -125,6 +125,7 @@ function renderCCMenu() {
         const row = document.createElement("tr");
 const colour = seriesColours[set.colour] || "#ffffff";
 row.style.backgroundColor = colour;
+        console.log("Set:", set.title, "| Colour:", set.colour, "| Applied:", colour);
         const averageDifficulty = set.totalDifficulty /
     puzzles.filter(puzzle => puzzle.setId === set.id).length;
 
