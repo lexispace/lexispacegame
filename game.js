@@ -13,6 +13,18 @@ let currentPuzzleIndex = -1;
 let thinkingAidUnlocked = false;
 let score = 100;
 let addedPairs = "";
+
+
+const seriesColours = {
+    blue:   "#dce9f8",
+    red:    "#f8dede",
+    green:  "#dff0df",
+    purple: "#e9def8",
+    amber:  "#f9ebcc",
+    teal:   "#d6efed",
+    pink:   "#f7dfeb",
+    grey:   "#e5e7eb"
+};
 // ====================
 // SECTION 2: PUZZLES + DICTIONARY
 // ====================
@@ -111,7 +123,8 @@ function renderCCMenu() {
 
     for (const set of sets.values()) {
         const row = document.createElement("tr");
-
+const colour = seriesColours[set.colour] || "#ffffff";
+row.style.backgroundColor = colour;
         const averageDifficulty = set.totalDifficulty /
     puzzles.filter(puzzle => puzzle.setId === set.id).length;
 
@@ -119,7 +132,7 @@ row.innerHTML = `
     <td class="ccSetTitle">${set.title}</td>
     <td>${set.description}</td>
     <td class="ccDifficulty">
-        <div>${averageDifficulty.toFixed(1)} / 5</div>
+        <div>${averageDifficulty.toFixed(1)} / 5★</div>
         <div class="difficultyBar">
             <div
                 class="difficultyBarFill"
@@ -256,6 +269,7 @@ Promise.all([
         target: word,
         setId: set.id,
         setTitle: set.title,
+        colour: set.colour,
         description: set.description,
         mode: set.mode,
         difficulty: set.difficulties[index]
