@@ -113,6 +113,7 @@ function renderCCMenu() {
             sets.set(puzzle.setId, {
                 id: puzzle.setId,
                 title: puzzle.setTitle,
+                colour: puzzle.colour,
                 description: puzzle.description,
                 totalDifficulty: 0
             });
