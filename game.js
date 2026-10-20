@@ -122,7 +122,9 @@ function renderCCMenu() {
     }
 
     for (const set of sets.values()) {
-       
+   const row = document.createElement("tr");
+const colour = seriesColours[set.colour] || "#ffffff";
+row.style.backgroundColor = colour;    
 const debug = document.getElementById("colourDebug");
 if (debug) {
     debug.textContent +=
