@@ -316,7 +316,7 @@ function maskToLetters(mask) {
 // ====================
 
 function updateRemaining() {
-    const original = maskToLetters(currentMask);
+    const original = maskToLetters(currentMask).toLowerCase();
     const remainingElement = document.getElementById("remaining");
 
     if (original === "—") {
@@ -409,8 +409,8 @@ function addWord() {
 }
 
 function shuffleLetters() {
-    const original = maskToLetters(currentMask);
-
+    const original = maskToLetters(currentMask).toLowerCase();
+    
     if (original === "—") {
         return;
     }
