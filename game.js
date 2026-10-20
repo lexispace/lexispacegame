@@ -13,6 +13,7 @@ let currentPuzzleIndex = -1;
 let thinkingAidUnlocked = false;
 let score = 100;
 let addedPairs = "";
+let solutionHintUsed = false;
 
 
 const seriesColours = {
@@ -52,9 +53,12 @@ function loadPuzzle(puzzle) {
     thinkingAidUnlocked = false;
 score = 100;
     addedPairs = "";
+    solutionHintUsed = false;
 
 document.getElementById("score").textContent = score;
 document.getElementById("scoreMessage").textContent = "";
+    document.getElementById("solutionHintButton").disabled = false;
+document.getElementById("solutionHintResult").textContent = "";
 
 document.getElementById("remainingPanel").style.display = "none";
 document.getElementById("thinkingAidStatus").textContent =
@@ -378,6 +382,45 @@ function unlockThinkingAid() {
     document.getElementById("revertButton").disabled = false;
 
     updateRemaining();
+}
+function revealSolutionHint() {
+    if (solutionHintUsed) {
+        return;
+    }
+
+    if (!dictionaryLoaded) {
+        document.getElementById("solutionHintResult").textContent =
+            "Dictionary is still loading.";
+        return;
+    }
+
+    solutionHintUsed = true;
+    score = Math.max(0, score - 20);
+
+    document.getElementById("score").textContent = score;
+
+    const targetMask = wordToMask(target);
+    const targetWord = normalizeWord(target);
+
+    const solutionLengths = [...dictionary]
+        .filter(word =>
+            normalizeWord(word) !== targetWord &&
+            wordToMask(word) === targetMask
+        )
+        .map(word => word.length)
+        .sort((a, b) => a - b);
+
+    const result = document.getElementById("solutionHintResult");
+
+    if (solutionLengths.length === 0) {
+        result.textContent = "No 1-word solutions found.";
+    } else {
+        result.textContent =
+            `${solutionLengths.length} solution(s): ` +
+            `{${solutionLengths.join(", ")}}`;
+    }
+
+    document.getElementById("solutionHintButton").disabled = true;
 }
 function addWord() {
     if (!dictionaryLoaded) {
