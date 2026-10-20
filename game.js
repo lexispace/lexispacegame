@@ -125,6 +125,13 @@ function renderCCMenu() {
         const row = document.createElement("tr");
 const colour = seriesColours[set.colour] || "#ffffff";
 row.style.backgroundColor = colour;
+
+const debug = document.getElementById("colourDebug");
+if (debug) {
+    debug.textContent +=
+        `${set.title}: JSON colour=${set.colour}, ` +
+        `applied colour=${colour}\n`;
+}
         console.log("Set:", set.title, "| Colour:", set.colour, "| Applied:", colour);
         const averageDifficulty = set.totalDifficulty /
     puzzles.filter(puzzle => puzzle.setId === set.id).length;
