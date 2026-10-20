@@ -163,6 +163,39 @@
         "Hestia", "Lachesis", 
         "Dioscuri", "Asclepius"],
       "difficulties": [2, 3, 4, 4, 4, 4, 4, 4, 4, 5]
+    },
+    {
+      "id": 18,
+      "title": "Capital Cities II",
+      "description": "More capital city-themed puzzles(MENA)",
+      "mode": "CC",
+      "words": ["Rabat", "Tehran", "Algiers", 
+        "Tbilisi", "Beirut", "Riyadh", 
+        "Doha", "Tripoli", 
+        "Baghdad", "Muscat"],
+      "difficulties": [2, 2, 3, 4, 4, 4, 4, 4, 5, 5]
+    },
+    {
+      "id": 19,
+      "title": "Capital Cities III",
+      "description": "Even more capital-city themed puzzles(Africa)",
+      "mode": "CC",
+      "words": ["Nairobi", "Lusaka", "Maseru", 
+        "Malabo", "Luanda", "Gaborone", 
+        "Pretoria", "Antananarivo", 
+        "Libreville", "Lilongwe"],
+      "difficulties": [2, 2, 3, 4, 4, 4, 4, 4, 5, 5]
+    },
+    {
+      "id": 20,
+      "title": "Capital Cities IV",
+      "description": "Yet more capital city-themed puzzles(Africa)",
+      "mode": "CC",
+      "words": ["Ougadougou", "Niamey", "Dakar", 
+        "Freetown", "Brazzaville", "Bissau", 
+        "Bangui", "Porto-Novo", 
+        "Abuja", "Monrovia"],
+      "difficulties": [3, 3, 4, 4, 4, 4, 4, 4, 5, 5]
     }
   ]
 }
