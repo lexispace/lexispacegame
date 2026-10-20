@@ -12,6 +12,7 @@ let puzzles = [];
 let currentPuzzleIndex = -1;
 let thinkingAidUnlocked = false;
 let score = 100;
+let addedPairs = "";
 // ====================
 // SECTION 2: PUZZLES + DICTIONARY
 // ====================
@@ -38,6 +39,7 @@ function loadPuzzle(puzzle) {
     playedWords = [];
     thinkingAidUnlocked = false;
 score = 100;
+    addedPairs = "";
 
 document.getElementById("score").textContent = score;
 document.getElementById("scoreMessage").textContent = "";
@@ -314,8 +316,27 @@ function maskToLetters(mask) {
 // ====================
 
 function updateRemaining() {
-    document.getElementById("remaining").textContent =
-        maskToLetters(currentMask);
+    const original = maskToLetters(currentMask);
+    const remainingElement = document.getElementById("remaining");
+
+    if (original === "—") {
+        remainingElement.textContent = "—";
+        return;
+    }
+
+    remainingElement.replaceChildren();
+
+    const originalSpan = document.createElement("span");
+    originalSpan.textContent = original;
+    remainingElement.appendChild(originalSpan);
+
+    if (addedPairs.length > 0) {
+        const addedSpan = document.createElement("span");
+        addedSpan.textContent = addedPairs;
+        addedSpan.style.color = "#d97706";
+        addedSpan.title = "Added using Thinking Aid";
+        remainingElement.appendChild(addedSpan);
+    }
 }
 function unlockThinkingAid() {
     if (thinkingAidUnlocked) {
@@ -388,24 +409,73 @@ function addWord() {
 }
 
 function shuffleLetters() {
-    const remaining = maskToLetters(currentMask);
+    const original = maskToLetters(currentMask);
 
-    if (remaining === "—") {
+    if (original === "—") {
         return;
     }
 
-    const letters = remaining.split("");
+    const letters = [
+        ...original.split("").map(letter => ({
+            letter,
+            added: false
+        })),
+        ...addedPairs.split("").map(letter => ({
+            letter,
+            added: true
+        }))
+    ];
 
     for (let i = letters.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [letters[i], letters[j]] = [letters[j], letters[i]];
     }
 
-    document.getElementById("remaining").textContent =
-        letters.join("");
+    const remainingElement = document.getElementById("remaining");
+    remainingElement.replaceChildren();
+
+    for (const item of letters) {
+        const span = document.createElement("span");
+        span.textContent = item.letter;
+
+        if (item.added) {
+            span.style.color = "#d97706";
+            span.title = "Added using Thinking Aid";
+        }
+
+        remainingElement.appendChild(span);
+    }
 }
 
+function addPairs() {
+    if (!thinkingAidUnlocked) {
+        return;
+    }
 
+    const input = prompt(
+        "Which letter or string would you like to add?\n" +
+        "Each letter will be added twice."
+    );
+
+    if (input === null || input.trim() === "") {
+        return;
+    }
+
+    const letters = normalizeWord(input);
+
+    if (letters === "") {
+        alert("Please enter at least one letter.");
+        return;
+    }
+
+    addedPairs += letters + letters;
+    updateRemaining();
+}
+
+function revertPairs() {
+    addedPairs = "";
+    updateRemaining();
+}
 // ====================
 // SECTION 5: SOLVER
 // ====================
