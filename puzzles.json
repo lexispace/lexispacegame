@@ -24,7 +24,7 @@
       "description": "Challenges inspired by the works of J.R.R. Tolkien",
       "mode": "CC",
       "colour": "red",
-      "words": ["Sam", "Pippin", "Frodo", "Elf", "One Ring", "Gondor", "Merry", "Smeagol", "Gollum", "Sauron"],
+      "words": ["Sam", "Pippin", "Frodo", "Elf", "One Ring", "Gondor", "Merry", "Sméagol", "Gollum", "Sauron"],
       "difficulties": [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
     },
     {
@@ -33,7 +33,7 @@
       "description": "More Tolkien-themed challenges",
       "mode": "CC",
       "colour": "red",
-      "words": ["Sindarin", "Gothmog", "Denethor", "Tengwar", "Palantir", "Rivendell", "Anduril", "Tolkien", "Melkor", "Morgoth"],
+      "words": ["Sindarin", "Gothmog", "Denethor", "Tengwar", "Palantír", "Rivendell", "Andúril", "Tolkien", "Melkor", "Morgoth"],
       "difficulties": [2, 2, 2, 3, 4, 4, 4, 5, 5, 5]
     },
     {
@@ -42,7 +42,7 @@
       "description": "Even more Tolkien-themed challenges",
       "mode": "CC",
       "colour": "red",
-      "words": ["Beleriand", "Feanorians", "Shelob", "Ulmo", "Azanulbizar", "Balrogs", "Silmarillion", "Ancalagon", "Minas Tirith", "Luthien"],
+      "words": ["Beleriand", "Fëanorians", "Shelob", "Ulmo", "Azanulbizar", "Balrogs", "Silmarillion", "Ancalagon", "Minas Tirith", "Lúthien"],
       "difficulties": [5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     },
     {
@@ -79,7 +79,7 @@
       "mode": "CC",
       "colour": "amber",
       "words": ["Ask not what your country can do for you — ask what you can do for your country", 
-        "Do or do not. There is no try.", 
+        "Do or do not. There is no try", 
         "Inconceivable!", "Never believe anything you read on the internet", 
         "I am the Senate", "Tell Cersei", "Mirror, mirror on the wall", 
         "Often does hatred hurt itself", "You cannot pass", "Not all that glitters is gold"],
