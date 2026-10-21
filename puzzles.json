@@ -216,6 +216,78 @@
         "Bangui", "Porto-Novo", 
         "Abuja", "Monrovia"],
       "difficulties": [3, 3, 4, 4, 4, 4, 4, 4, 5, 5]
+    },
+    {
+      "id": 21,
+      "title": "Singapore MRT I",
+      "description": "Singapore MRT-themed puzzles",
+      "mode": "CC",
+      "colour": "yellow",
+      "words": ["Ang Mo Kio", "Bencoolen", "Bishan", 
+        "Bukit Gombak", "Caldecott", "Bukit Batok", 
+        "Bendemeer", "Bright Hill", 
+        "Canberra", "Boon Lay"],
+      "difficulties": [1, 2, 2, 3, 3, 4, 4, 4, 4, 5]
+    },
+    {
+      "id": 22,
+      "title": "Singapore MRT II",
+      "description": "More MRT-themed puzzles",
+      "mode": "CC",
+      "colour": "yellow",
+      "words": ["Fort Canning", "Clementi", "Eunos", 
+        "Gul Circle", "City Hall", "Chinese Garden", 
+        "Cantonment", "Expo", 
+        "Hillview", "Esplanade"],
+      "difficulties": [2, 3, 3, 3, 4, 4, 4, 4, 4, 5]
+    },
+    {
+      "id": 23,
+      "title": "Singapore MRT III",
+      "description": "Even more MRT-themed puzzles",
+      "mode": "CC",
+      "colour": "yellow",
+      "words": ["Hume", "Kallang", "Lavender", 
+        "Little India", "Khatib", "Hougang", 
+        "Kaki Bukit", "Lentor", 
+        "Joo Koon", "Katong Park"],
+      "difficulties": [2, 2, 3, 3, 4, 4, 4, 4, 5, 5]
+    },
+    {
+      "id": 24,
+      "title": "Singapore MRT IV",
+      "description": "Yet more MRT-themed puzzles",
+      "mode": "CC",
+      "colour": "yellow",
+      "words": ["Pioneer", "Potong Pasir", "Newton", 
+        "Novena", "one-north", "Marine Parade", 
+        "Marine Terrace", "Mountbatten", 
+        "Marsiling", "Paya Lebar"],
+      "difficulties": [2, 2, 3, 3, 3, 4, 4, 4, 5, 5]
+    },
+    {
+      "id": 25,
+      "title": "Singapore MRT V",
+      "description": "Another batch of MRT-themed puzzles",
+      "mode": "CC",
+      "colour": "yellow",
+      "words": ["Raffles Place", "Redhill", "Rochor", 
+        "Tan Kah Kee", "Promenade", "Tampines", 
+        "Tampines East", "Tampines West", 
+        "Punggol Coast", "Siglap"],
+      "difficulties": [2, 2, 2, 3, 4, 4, 4, 4, 5, 5]
+    },
+    {
+      "id": 26,
+      "title": "Singapore MRT VI",
+      "description": "Yet another batch of MRT-themed puzzles",
+      "mode": "CC",
+      "colour": "yellow",
+      "words": ["Corporation", "Tanah Merah", "Toa Payoh", 
+        "Woodlands", "Tagore", "Enterprise", 
+        "Tuas Crescent", "Mount Pleasant", 
+        "Tuas West Road", "Yew Tee"],
+      "difficulties": [2, 3, 3, 3, 3, 3, 4, 4, 5, 5]
     }
   ]
 }
