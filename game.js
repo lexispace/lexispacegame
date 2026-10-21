@@ -24,7 +24,8 @@ const seriesColours = {
     amber:  "#f9ebcc",
     teal:   "#d6efed",
     pink:   "#f7dfeb",
-    grey:   "#e5e7eb"
+    grey:   "#e5e7eb",
+    yellow: "#FFFFE0"
 };
 // ====================
 // SECTION 2: PUZZLES + DICTIONARY
