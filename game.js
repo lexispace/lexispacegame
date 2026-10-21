@@ -16,6 +16,7 @@ let addedPairs = "";
 let solutionHintUsed = false;
 let puzzleStates = new Map();
 let puzzleSolved = false;
+let gaveUp = false;
 
 
 const seriesColours = {
@@ -53,6 +54,7 @@ function savePuzzleState() {
         addedPairs,
         solutionHintUsed,
         puzzleSolved,
+        gaveUp,
         scoreMessage: document.getElementById("scoreMessage").textContent,
 solutionHintResult: document.getElementById("solutionHintResult").textContent
     });
@@ -98,6 +100,9 @@ function loadPuzzle(puzzle) {
     puzzleSolved = savedState
         ? savedState.puzzleSolved
         : false;
+    gaveUp = savedState
+    ? Boolean(savedState.gaveUp)
+    : false;
 
     document.getElementById("score").textContent = score;
 
@@ -134,6 +139,7 @@ function loadPuzzle(puzzle) {
 
     document.getElementById("ccMenu").style.display = "none";
     document.getElementById("gameScreen").style.display = "block";
+    
 
     solverReady = false;
     solverMoves = new Map();
@@ -162,6 +168,8 @@ function loadPuzzle(puzzle) {
         puzzleSolved ? "Solved!" : "";
 
     document.getElementById("solverResult").textContent = "";
+    document.getElementById("wordInput").disabled =
+    puzzleSolved || gaveUp;
 
     updateRemaining();
 
@@ -541,6 +549,8 @@ function addWord() {
 
     if (currentMask === 0) {
         puzzleSolved = true;
+        savePuzzleState();
+renderCCMenu();
 
         let multiplier;
 
@@ -709,6 +719,26 @@ function solvePuzzle() {
 
     console.log("Solver time:", time.toFixed(1), "ms");
     console.log("Solution:", solution);
+        // Revealing a solution counts as giving up.
+    gaveUp = true;
+    score = 0;
+
+    document.getElementById("score").textContent = score;
+    document.getElementById("scoreMessage").textContent =
+        "Puzzle given up. Final score: 0.";
+
+    document.getElementById("message").textContent =
+        "Puzzle given up.";
+
+    document.getElementById("wordInput").disabled = true;
+    document.getElementById("solutionHintButton").disabled = true;
+    document.getElementById("unlockThinkingAid").disabled = true;
+    document.getElementById("shuffleButton").disabled = true;
+    document.getElementById("addPairsButton").disabled = true;
+    document.getElementById("revertButton").disabled = true;
+
+    savePuzzleState();
+    renderCCMenu();
 }
 
 function bidirectionalBFS(start, goal) {
