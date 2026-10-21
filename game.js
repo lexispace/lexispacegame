@@ -14,6 +14,8 @@ let thinkingAidUnlocked = false;
 let score = 100;
 let addedPairs = "";
 let solutionHintUsed = false;
+let puzzleStates = new Map();
+let puzzleSolved = false;
 
 
 const seriesColours = {
@@ -38,8 +40,27 @@ function normalizeWord(word) {
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/[^a-z]/g, "");
 }
+function savePuzzleState() {
+    if (currentPuzzleId === null) {
+        return;
+    }
+
+    puzzleStates.set(currentPuzzleId, {
+        currentMask,
+        playedWords: [...playedWords],
+        thinkingAidUnlocked,
+        score,
+        addedPairs,
+        solutionHintUsed,
+        puzzleSolved,
+        scoreMessage: document.getElementById("scoreMessage").textContent,
+solutionHintResult: document.getElementById("solutionHintResult").textContent
+    });
+}
 function loadPuzzle(puzzle) {
-    // Keep the original spelling for display, but normalize internally.
+    // Save the puzzle we're leaving before switching.
+    savePuzzleState();
+
     const displayTarget = puzzle.target;
     target = normalizeWord(displayTarget);
 
@@ -49,30 +70,70 @@ function loadPuzzle(puzzle) {
         ? puzzles.findIndex(p => p.id === puzzle.id)
         : -1;
 
-    currentMask = wordToMask(target);
-    playedWords = [];
-    thinkingAidUnlocked = false;
-score = 100;
-    addedPairs = "";
-    solutionHintUsed = false;
+    // Restore this puzzle if we've visited it before.
+    const savedState = puzzle.id !== null
+        ? puzzleStates.get(puzzle.id)
+        : null;
 
-document.getElementById("score").textContent = score;
-document.getElementById("scoreMessage").textContent = "";
-    document.getElementById("solutionHintButton").disabled = false;
-document.getElementById("solutionHintResult").textContent = "";
+    currentMask = savedState
+        ? savedState.currentMask
+        : wordToMask(target);
 
-document.getElementById("remainingPanel").style.display = "none";
-document.getElementById("thinkingAidStatus").textContent =
-    "Thinking aid locked.";
+    playedWords = savedState
+        ? [...savedState.playedWords]
+        : [];
 
-document.getElementById("unlockThinkingAid").disabled = false;
+    thinkingAidUnlocked = savedState
+        ? savedState.thinkingAidUnlocked
+        : false;
 
-document.getElementById("shuffleButton").disabled = true;
-document.getElementById("addPairsButton").disabled = true;
-document.getElementById("revertButton").disabled = true;
-    
+    score = savedState ? savedState.score : 100;
+
+    addedPairs = savedState ? savedState.addedPairs : "";
+
+    solutionHintUsed = savedState
+        ? savedState.solutionHintUsed
+        : false;
+
+    puzzleSolved = savedState
+        ? savedState.puzzleSolved
+        : false;
+
+    document.getElementById("score").textContent = score;
+
+    document.getElementById("scoreMessage").textContent =
+        savedState?.scoreMessage || "";
+
+    document.getElementById("solutionHintButton").disabled =
+        solutionHintUsed || puzzleSolved;
+
+    document.getElementById("solutionHintResult").textContent =
+        savedState?.solutionHintResult || "";
+
+    document.getElementById("remainingPanel").style.display =
+        thinkingAidUnlocked ? "block" : "none";
+
+    document.getElementById("thinkingAidStatus").textContent =
+        thinkingAidUnlocked
+            ? "Thinking Aid unlocked!"
+            : "Thinking aid locked.";
+
+    document.getElementById("unlockThinkingAid").disabled =
+        thinkingAidUnlocked || puzzleSolved;
+
+    document.getElementById("shuffleButton").disabled =
+        !thinkingAidUnlocked || puzzleSolved;
+
+    document.getElementById("addPairsButton").disabled =
+        !thinkingAidUnlocked || puzzleSolved;
+
+    document.getElementById("revertButton").disabled =
+        !thinkingAidUnlocked || puzzleSolved;
+
+    document.getElementById("wordInput").disabled = puzzleSolved;
+
     document.getElementById("ccMenu").style.display = "none";
-document.getElementById("gameScreen").style.display = "block";
+    document.getElementById("gameScreen").style.display = "block";
 
     solverReady = false;
     solverMoves = new Map();
@@ -81,21 +142,35 @@ document.getElementById("gameScreen").style.display = "block";
         displayTarget.toUpperCase();
 
     document.getElementById("puzzleNumber").textContent =
-    puzzle.id !== null
-        ? `${puzzle.setTitle} — Puzzle ${puzzle.position} · ${"★".repeat(puzzle.difficulty)}${"☆".repeat(5 - puzzle.difficulty)}`
-        : "Random Puzzle";
+        puzzle.id !== null
+            ? `${puzzle.setTitle} — Puzzle ${puzzle.position} · ${
+                "★".repeat(puzzle.difficulty)
+            }${"☆".repeat(5 - puzzle.difficulty)}`
+            : "Random Puzzle";
 
-    document.getElementById("wordList").innerHTML = "";
+    // Restore the list of words already played.
+    const wordList = document.getElementById("wordList");
+    wordList.innerHTML = "";
 
-    document.getElementById("message").textContent = "";
+    for (const word of playedWords) {
+        const listItem = document.createElement("li");
+        listItem.textContent = word;
+        wordList.appendChild(listItem);
+    }
+
+    document.getElementById("message").textContent =
+        puzzleSolved ? "Solved!" : "";
+
     document.getElementById("solverResult").textContent = "";
 
     updateRemaining();
 
     document.getElementById("wordInput").value = "";
-    document.getElementById("wordInput").focus();
 
-    // Navigation is available only for curated puzzles.
+    if (!puzzleSolved) {
+        document.getElementById("wordInput").focus();
+    }
+
     document.getElementById("previousPuzzle").style.display =
         currentPuzzleIndex > 0 ? "inline-block" : "none";
 
@@ -105,7 +180,6 @@ document.getElementById("gameScreen").style.display = "block";
             ? "inline-block"
             : "none";
 }
-
 function renderCCMenu() {
     const tbody = document.getElementById("ccSetTableBody");
     tbody.innerHTML = "";
@@ -424,6 +498,10 @@ function revealSolutionHint() {
     document.getElementById("solutionHintButton").disabled = true;
 }
 function addWord() {
+    if (puzzleSolved) {
+        return;
+    }
+
     if (!dictionaryLoaded) {
         document.getElementById("message").textContent =
             "Dictionary is still loading.";
@@ -462,13 +540,43 @@ function addWord() {
     updateRemaining();
 
     if (currentMask === 0) {
-        document.getElementById("message").textContent =
-            "Solved!";
+        puzzleSolved = true;
+
+        let multiplier;
+
+        if (playedWords.length === 1) {
+            multiplier = 1;
+        } else if (playedWords.length === 2) {
+            multiplier = 0.5;
+        } else if (playedWords.length === 3) {
+            multiplier = 0.25;
+        } else {
+            multiplier = 0;
+        }
+
+        // Apply the multiplier exactly once.
+        score = Math.round(score * multiplier * 100) / 100;
+
+        document.getElementById("score").textContent = score;
+        document.getElementById("scoreMessage").textContent =
+            `${playedWords.length} word(s) used · ` +
+            `${multiplier}× multiplier · Final score: ${score}`;
+
+        document.getElementById("message").textContent = "Solved!";
+
+        // Prevent further moves or hints on this puzzle.
+        document.getElementById("wordInput").disabled = true;
+        document.getElementById("unlockThinkingAid").disabled = true;
+        document.getElementById("solutionHintButton").disabled = true;
+        document.getElementById("shuffleButton").disabled = true;
+        document.getElementById("addPairsButton").disabled = true;
+        document.getElementById("revertButton").disabled = true;
     } else {
         document.getElementById("message").textContent = "";
     }
-}
 
+    savePuzzleState();
+}
 function shuffleLetters() {
     const original = maskToLetters(currentMask).toLowerCase();
     
