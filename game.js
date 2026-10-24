@@ -256,29 +256,28 @@ function renderCCMenu() {
                         style="width: ${averageDifficulty / 5 * 100}%"
                     ></div>
                 </div>
-            </td>
             <td class="ccProgress">
-                <div
-                    <div class="progressBarSpacer">&nbsp;</div>
-                    class="progressBar"
-                    title="${earnedPoints} points earned; ${lostPoints} lost; ${
-                        totalPossible - earnedPoints - lostPoints
-                    } points unattempted"
-                >
-                    <div
-                        class="progressBarGreen"
-                        style="width: ${greenPercent}%"
-                    ></div>
-                    <div
-                        class="progressBarRed"
-                        style="width: ${redPercent}%"
-                    ></div>
-                    <div
-                        class="progressBarEmpty"
-                        style="width: ${emptyPercent}%"
-                    ></div>
-                </div>
-            </td>
+    <div class="progressBarSpacer"></div>
+    <div
+        class="progressBar"
+        title="${earnedPoints} points earned; ${lostPoints} lost; ${
+            totalPossible - earnedPoints - lostPoints
+        } points unattempted"
+    >
+        <div
+            class="progressBarGreen"
+            style="width: ${greenPercent}%"
+        ></div>
+        <div
+            class="progressBarRed"
+            style="width: ${redPercent}%"
+        ></div>
+        <div
+            class="progressBarEmpty"
+            style="width: ${emptyPercent}%"
+        ></div>
+    </div>
+</td>
         `;
 
         row.addEventListener("click", () => startSet(set.id));
