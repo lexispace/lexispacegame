@@ -97,6 +97,53 @@
         #ccMenu {
     margin: 20px auto;
 }
+        #mainMenuLayout {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.8fr) minmax(0, 2fr);
+    gap: 24px;
+    align-items: start;
+    text-align: left;
+}
+
+#roadmapPanel {
+    background: white;
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    line-height: 1.5;
+}
+
+#roadmapPanel h2 {
+    font-size: 24px;
+    letter-spacing: normal;
+    margin-top: 0;
+}
+
+#roadmapPanel h3 {
+    font-size: 17px;
+    margin-top: 22px;
+    margin-bottom: 6px;
+}
+
+#roadmapPanel p {
+    font-size: 14px;
+}
+
+#roadmapPanel ul {
+    padding-left: 20px;
+    font-size: 14px;
+}
+
+#ccMenu {
+    min-width: 0;
+    margin: 0;
+}
+
+@media (max-width: 750px) {
+    #mainMenuLayout {
+        grid-template-columns: 1fr;
+    }
+}
 
 #ccSetTable {
     width: 100%;
@@ -144,7 +191,7 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            max-width: 700px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
             background: #f5f7fa;
@@ -248,7 +295,31 @@
 
 <body>
     <h1>Lexispace v0.5</h1>
-<div id="ccMenu">
+<div id="mainMenuLayout">
+
+    <section id="roadmapPanel">
+        <h2>Upcoming Changes</h2>
+
+        <p>
+            Welcome to the Lexispace beta! Here are some features
+            I'm planning to add.
+        </p>
+
+        <h3>How to Play</h3>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Add words to cancel out the target's letter parities.
+        </p>
+
+        <h3>Planned Features</h3>
+        <ul>
+            <li>Lorem ipsum dolor sit amet.</li>
+            <li>Consectetur adipiscing elit.</li>
+            <li>Sed do eiusmod tempor incididunt ut labore.</li>
+        </ul>
+    </section>
+
+    <div id="ccMenu">
     <h2>Curated Challenges</h2>
    
     <p>Choose a set to begin.</p>
@@ -264,6 +335,7 @@
         </thead>
         <tbody id="ccSetTableBody"></tbody>
     </table>
+</div>
 </div>
 
 <div id="gameScreen" style="display: none;">
