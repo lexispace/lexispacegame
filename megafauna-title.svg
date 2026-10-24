@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <rect width="1600" height="900" fill="#faf8f2"/>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M1 1 L7 4 L1 7" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+  <!-- Small, understated frame marks -->
+  <path d="M92 96h34M92 96v34M1508 804h-34M1508 804v-34" fill="none" stroke="#d8d4ca" stroke-width="2"/>
+  <!-- Playful but restrained title typography -->
+  <g font-family="Arial, Helvetica, sans-serif" font-size="128" font-weight="800" letter-spacing="2" text-anchor="middle" fill="#232323">
+    <text x="256" y="362" fill="#e45745">M</text><text x="392" y="362" fill="#e39a24">E</text><text x="528" y="362" fill="#e5c234">G</text><text x="664" y="362">A</text><text x="800" y="362" fill="#79a94b">F</text><text x="936" y="362">A</text><text x="1072" y="362" fill="#4e86bb">U</text><text x="1208" y="362" fill="#6e66b0">N</text><text x="1344" y="362" fill="#cf6a96">A</text>
+  </g>
+  <!-- Two of the three As are crossed out; the middle A remains in the anagram -->
+  <g stroke="#232323" stroke-width="7" stroke-linecap="round">
+    <path d="M618 266L710 359"/><path d="M894 266L986 359"/>
+  </g>
+  <!-- Seven colour-matched, gently winding paths -->
+  <g fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".88">
+    <path d="M256 372 C285 455 730 500 982 645" stroke="#e45745" marker-end="url(#arrow)"/>
+    <path d="M392 372 C440 452 900 520 1082 645" stroke="#e39a24" marker-end="url(#arrow)"/>
+    <path d="M528 372 C545 460 700 530 782 645" stroke="#e5c234" marker-end="url(#arrow)"/>
+    <path d="M800 372 C760 455 585 520 482 645" stroke="#79a94b" marker-end="url(#arrow)"/>
+    <path d="M1072 372 C1020 455 680 520 582 645" stroke="#4e86bb" marker-end="url(#arrow)"/>
+    <path d="M1208 372 C1115 455 760 530 682 645" stroke="#6e66b0" marker-end="url(#arrow)"/>
+    <path d="M1344 372 C1240 455 920 525 882 645" stroke="#cf6a96" marker-end="url(#arrow)"/>
+  </g>
+  <!-- Target word, coloured to match the corresponding source letters -->
+  <g font-family="Arial, Helvetica, sans-serif" font-size="88" font-weight="800" letter-spacing="7" text-anchor="middle">
+    <text x="500" y="730" fill="#4f8b78">F</text><text x="600" y="730" fill="#4e86bb">U</text><text x="700" y="730" fill="#8269ad">N</text><text x="800" y="730" fill="#e5c234">G</text><text x="900" y="730" fill="#cf6a96">A</text><text x="1000" y="730" fill="#e45745">M</text><text x="1100" y="730" fill="#e39a24">E</text>
+  </g>
+</svg>
