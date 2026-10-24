@@ -259,6 +259,7 @@ function renderCCMenu() {
             </td>
             <td class="ccProgress">
                 <div
+                    <div class="progressBarSpacer">&nbsp;</div>
                     class="progressBar"
                     title="${earnedPoints} points earned; ${lostPoints} lost; ${
                         totalPossible - earnedPoints - lostPoints
