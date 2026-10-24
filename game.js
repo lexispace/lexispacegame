@@ -110,7 +110,7 @@ function loadPuzzle(puzzle) {
         savedState?.scoreMessage || "";
 
     document.getElementById("solutionHintButton").disabled =
-        solutionHintUsed || puzzleSolved;
+        solutionHintUsed || puzzleSolved || gaveUp;
 
     document.getElementById("solutionHintResult").textContent =
         savedState?.solutionHintResult || "";
@@ -124,18 +124,18 @@ function loadPuzzle(puzzle) {
             : "Thinking aid locked.";
 
     document.getElementById("unlockThinkingAid").disabled =
-        thinkingAidUnlocked || puzzleSolved;
+        thinkingAidUnlocked || puzzleSolved || gaveUp;
 
     document.getElementById("shuffleButton").disabled =
-        !thinkingAidUnlocked || puzzleSolved;
+        !thinkingAidUnlocked || puzzleSolved || gaveUp;
 
     document.getElementById("addPairsButton").disabled =
-        !thinkingAidUnlocked || puzzleSolved;
+        !thinkingAidUnlocked || puzzleSolved || gaveUp;
 
     document.getElementById("revertButton").disabled =
-        !thinkingAidUnlocked || puzzleSolved;
+        !thinkingAidUnlocked || puzzleSolved || gaveUp;
 
-    document.getElementById("wordInput").disabled = puzzleSolved;
+    document.getElementById("wordInput").disabled = puzzleSolved || gaveUp;
 
     document.getElementById("ccMenu").style.display = "none";
     document.getElementById("gameScreen").style.display = "block";
