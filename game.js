@@ -188,11 +188,11 @@ function loadPuzzle(puzzle) {
             ? "inline-block"
             : "none";
 }
+
 function renderCCMenu() {
     const tbody = document.getElementById("ccSetTableBody");
     tbody.innerHTML = "";
 
-    // Calculate the total difficulty of each set.
     const sets = new Map();
 
     for (const puzzle of puzzles) {
@@ -202,42 +202,88 @@ function renderCCMenu() {
                 title: puzzle.setTitle,
                 colour: puzzle.colour,
                 description: puzzle.description,
-                totalDifficulty: 0
+                totalDifficulty: 0,
+                puzzles: []
             });
         }
 
-        sets.get(puzzle.setId).totalDifficulty += puzzle.difficulty;
+        const set = sets.get(puzzle.setId);
+        set.totalDifficulty += puzzle.difficulty;
+        set.puzzles.push(puzzle);
     }
 
     for (const set of sets.values()) {
-   const row = document.createElement("tr");
-const colour = seriesColours[set.colour] || "#ffffff";
-row.style.backgroundColor = colour;    
+        const row = document.createElement("tr");
+        row.style.backgroundColor =
+            seriesColours[set.colour] || "#ffffff";
 
-        console.log("Set:", set.title, "| Colour:", set.colour, "| Applied:", colour);
-        const averageDifficulty = set.totalDifficulty /
-    puzzles.filter(puzzle => puzzle.setId === set.id).length;
+        const puzzleCount = set.puzzles.length;
+        const averageDifficulty =
+            set.totalDifficulty / puzzleCount;
+        const totalPossible = puzzleCount * 100;
 
-row.innerHTML = `
-    <td class="ccSetTitle">${set.title}</td>
-    <td>${set.description}</td>
-    <td class="ccDifficulty">
-        <div>${averageDifficulty.toFixed(1)} / 5★</div>
-        <div class="difficultyBar">
-            <div
-                class="difficultyBarFill"
-                style="width: ${averageDifficulty / 5 * 100}%"
-            ></div>
-        </div>
-    </td>
-`;
+        let earnedPoints = 0;
+        let lostPoints = 0;
+
+        for (const puzzle of set.puzzles) {
+            const state = puzzleStates.get(puzzle.id);
+
+            if (state && (state.puzzleSolved || state.gaveUp)) {
+                const earned = state.gaveUp
+                    ? 0
+                    : Math.max(0, Math.min(100, state.score));
+
+                earnedPoints += earned;
+                lostPoints += 100 - earned;
+            }
+        }
+
+        const greenPercent =
+            earnedPoints / totalPossible * 100;
+        const redPercent =
+            lostPoints / totalPossible * 100;
+        const emptyPercent =
+            100 - greenPercent - redPercent;
+
+        row.innerHTML = `
+            <td class="ccSetTitle">${set.title}</td>
+            <td>${set.description}</td>
+            <td class="ccDifficulty">
+                <div>${averageDifficulty.toFixed(1)} / 5★</div>
+                <div class="difficultyBar">
+                    <div
+                        class="difficultyBarFill"
+                        style="width: ${averageDifficulty / 5 * 100}%"
+                    ></div>
+                </div>
+            </td>
+            <td class="ccProgress">
+                <div
+                    class="progressBar"
+                    title="${earnedPoints} points earned; ${lostPoints} lost; ${
+                        totalPossible - earnedPoints - lostPoints
+                    } points unattempted"
+                >
+                    <div
+                        class="progressBarGreen"
+                        style="width: ${greenPercent}%"
+                    ></div>
+                    <div
+                        class="progressBarRed"
+                        style="width: ${redPercent}%"
+                    ></div>
+                    <div
+                        class="progressBarEmpty"
+                        style="width: ${emptyPercent}%"
+                    ></div>
+                </div>
+            </td>
+        `;
+
         row.addEventListener("click", () => startSet(set.id));
-
         tbody.appendChild(row);
     }
 }
-
-
 function showCCMenu() {
     document.getElementById("gameScreen").style.display = "none";
     document.getElementById("ccMenu").style.display = "block";
